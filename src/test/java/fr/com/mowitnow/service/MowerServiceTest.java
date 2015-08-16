@@ -2,6 +2,7 @@ package fr.com.mowitnow.service;
 
 import fr.com.mowitnow.Direction;
 import fr.com.mowitnow.Move;
+import fr.com.mowitnow.domain.Point;
 import fr.com.mowitnow.domain.Tuple;
 import fr.com.mowitnow.domain.Lawn;
 import fr.com.mowitnow.domain.Mower;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static fr.com.mowitnow.domain.Mower.MowerBuilder.withDir;
 import static fr.com.mowitnow.utils.ParsingUtils.asQueue;
 
 /**
@@ -33,7 +35,7 @@ public class MowerServiceTest {
     public void should_move_from_direction() throws Exception {
         Direction dir = Direction.valueOf("E");
         Assert.assertNotNull(dir);
-        Assert.assertEquals(Move.G.move(Direction.E), Direction.N);
+        Assert.assertEquals(Move.G.apply(withDir(dir).andPosition(Point.PointBuilder.withX(1).andY(2)),null).getDir(), Direction.N);
     }
 
     @Test

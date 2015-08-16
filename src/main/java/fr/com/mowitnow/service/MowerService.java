@@ -34,7 +34,7 @@ public class MowerService {
 
     public Mower executeInstructions(Queue<String> instructions, Mower mower, final Lawn lawn, Consumer<Mower> printer) {
         BiFunction<Mower, Move, Mower> move =
-                (oldMower, newMove) -> newMove.getStrategy().move(oldMower, lawn);
+                (oldMower, newMove) -> newMove.apply(oldMower, lawn);
         final Mower mow = move.apply(mower, Move.valueOf(instructions.poll()));
         if (instructions.size() > 0)
             return executeInstructions(instructions, mow, lawn, printer);

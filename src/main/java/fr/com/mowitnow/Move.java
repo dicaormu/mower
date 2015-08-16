@@ -1,49 +1,42 @@
 package fr.com.mowitnow;
 
 
+import fr.com.mowitnow.domain.Lawn;
+import fr.com.mowitnow.domain.Mower;
+import fr.com.mowitnow.domain.Point;
 import fr.com.mowitnow.mowstrategy.ComputeMove;
-import fr.com.mowitnow.mowstrategy.SimpleMoveComputeStrategy;
-import fr.com.mowitnow.mowstrategy.SimpleTurnComputeStrategy;
 
-public enum Move {
-    D('D', new SimpleTurnComputeStrategy('D')) {
+import java.util.function.BiFunction;
+
+import static fr.com.mowitnow.domain.Mower.MowerBuilder.withDir;
+
+public enum Move implements BiFunction<Mower, Lawn, Mower> {
+    D() {
         @Override
-        public Direction move(Direction oldDirection) {
-            return oldDirection.getNext();
+        public Mower apply(Mower oldMower, Lawn lawn) {
+            Direction direction = oldMower.getDir();
+            return withDir(direction.getNext()).andPosition(oldMower.getPosition());
         }
+
     },
-    G('G', new SimpleTurnComputeStrategy('G')) {
+    G() {
         @Override
-        public Direction move(Direction oldDirection) {
-            return oldDirection.getPrevious();
+        public Mower apply(Mower oldMower, Lawn lawn) {
+            Direction direction = oldMower.getDir();
+            return withDir(direction.getPrevious()).andPosition(oldMower.getPosition());
         }
+
     },
-    A('A', new SimpleMoveComputeStrategy(1)) {
+    A() {
         @Override
-        public Direction move(Direction oldDirection) {
-            return oldDirection;
+        public Mower apply(Mower oldMower, Lawn lawn) {
+            final Point newPoint = oldMower.getDir().
+                    addInPoint(oldMower.getPosition().getx(), oldMower.getPosition().gety(), 1);
+            return lawn.isInside(newPoint) ?
+                    withDir(oldMower.getDir()).andPosition(newPoint) :
+                    withDir(oldMower.getDir()).andPosition(oldMower.getPosition());
+
         }
     };
 
-    private int numPositions;
-    private ComputeMove strategy;
-
-    Move(int numPositions, ComputeMove strategy) {
-        this.numPositions = numPositions;
-        this.strategy = strategy;
-    }
-
-    public static Move getMove(char value) {
-        return Move.valueOf(Character.valueOf(value).toString());
-    }
-
-    public int getNumPositions() {
-        return numPositions;
-    }
-
-    public ComputeMove getStrategy() {
-        return strategy;
-    }
-
-    public abstract Direction move(Direction oldDirection);
 }
