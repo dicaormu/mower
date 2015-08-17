@@ -22,7 +22,11 @@ public class Lawn {
     }
 
     public List<Mower> getMowers() {
-        return mowers;
+        return new ArrayList<>(mowers);
+    }
+
+    public void addMower(Mower mower){
+        mowers.add(mower);
     }
 
     public boolean isInside(Point point) {
@@ -30,7 +34,6 @@ public class Lawn {
                 point.gety() <= this.maxCoordinate.gety() &&
                 point.getx() >= 0 &&
                 point.gety() >= 0;
-
     }
 
     public static class LawnBuilder {
@@ -41,10 +44,10 @@ public class Lawn {
         }
 
         public static LawnBuilder from(String line) {
+            Objects.nonNull(line);
             String[] pocs = line.split(Constants.SEPARATOR);
             Point max = withX(new Integer(pocs[0])).andY(new Integer(pocs[1]));
             return from(max);
-            //return new LawnBuilder(maxCoordinate);
         }
 
         public static LawnBuilder from(Point maxCoordinate) {

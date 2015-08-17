@@ -5,8 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Point {
-
-
     private int x;
     private int y;
 
@@ -14,7 +12,6 @@ public class Point {
         this.x = x;
         this.y = y;
     }
-
 
     public int getx() {
         return x;

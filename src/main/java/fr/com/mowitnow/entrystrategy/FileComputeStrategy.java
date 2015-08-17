@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileComputeStrategy  {
+
+    //TODO ERASE
+
     private String filename;
 
     public FileComputeStrategy(String filename) {

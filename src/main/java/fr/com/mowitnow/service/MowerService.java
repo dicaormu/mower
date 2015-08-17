@@ -4,6 +4,8 @@ import fr.com.mowitnow.Move;
 import fr.com.mowitnow.domain.Lawn;
 import fr.com.mowitnow.domain.Mower;
 import fr.com.mowitnow.domain.Tuple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Queue;
@@ -15,20 +17,26 @@ import static fr.com.mowitnow.domain.Lawn.LawnBuilder.from;
 import static fr.com.mowitnow.domain.Mower.MowerBuilder.fromStringToMower;
 import static fr.com.mowitnow.utils.Constants.EMPTY_STRING;
 import static fr.com.mowitnow.utils.ParsingUtils.asQueue;
-import static fr.com.mowitnow.utils.ParsingUtils.loadTuples;
+import static fr.com.mowitnow.utils.ParsingUtils.collectToTuples;
 
 
 public class MowerService {
 
+    private final Logger logger = LoggerFactory.getLogger(MowerService.class);
+
     public Lawn computeInstructions(Supplier<List<String>> compute, Consumer<Mower> printer) {
-        final List<String> instructions = compute.get();
-        final Lawn lawn = from(instructions.get(0)).build();
-        final List<Tuple<String, String>> tuples = loadTuples(instructions);
+        final List<String> allInstructions = compute.get();
+        logger.info("Computing {} instructions ", allInstructions.size());
+        final Lawn lawn = from(allInstructions.get(0)).build();
+        final List<Tuple<String, String>> tuples = collectToTuples(allInstructions);
         tuples.stream().forEach(tuple -> {
-            final Mower initialMower = fromStringToMower.apply(tuple.first);//TODO mejorar lawn.getMowers
-            Mower newState = executeInstructions(asQueue(tuple.second.split(EMPTY_STRING)), initialMower, lawn,printer);
-            lawn.getMowers().add(newState);
+            logger.debug("Handling mower in position {} with instructions {} ", tuple.first, tuple.second);
+            final Mower initialMower = fromStringToMower.apply(tuple.first);
+            final String[] movementsLine = tuple.second.split(EMPTY_STRING);
+            final Mower newState = executeInstructions(asQueue(movementsLine), initialMower, lawn, printer);
+            lawn.addMower(newState);
         });
+        logger.info("Done computing instructions");
         return lawn;
     }
 

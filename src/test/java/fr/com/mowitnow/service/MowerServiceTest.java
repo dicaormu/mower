@@ -2,10 +2,10 @@ package fr.com.mowitnow.service;
 
 import fr.com.mowitnow.Direction;
 import fr.com.mowitnow.Move;
-import fr.com.mowitnow.domain.Point;
-import fr.com.mowitnow.domain.Tuple;
 import fr.com.mowitnow.domain.Lawn;
 import fr.com.mowitnow.domain.Mower;
+import fr.com.mowitnow.domain.Point;
+import fr.com.mowitnow.domain.Tuple;
 import fr.com.mowitnow.utils.ParsingUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,11 +18,10 @@ import java.util.function.Supplier;
 import static fr.com.mowitnow.domain.Mower.MowerBuilder.withDir;
 import static fr.com.mowitnow.utils.ParsingUtils.asQueue;
 
-/**
- * Created by Diana on 10/08/2015.
- */
+
 public class MowerServiceTest {
 
+    //TODO, split tests
 
     @Test
     public void should_return_direction() throws Exception {
@@ -35,7 +34,7 @@ public class MowerServiceTest {
     public void should_move_from_direction() throws Exception {
         Direction dir = Direction.valueOf("E");
         Assert.assertNotNull(dir);
-        Assert.assertEquals(Move.G.apply(withDir(dir).andPosition(Point.PointBuilder.withX(1).andY(2)),null).getDir(), Direction.N);
+        Assert.assertEquals(Move.G.apply(withDir(dir).andPosition(Point.PointBuilder.withX(1).andY(2)), null).getDir(), Direction.N);
     }
 
     @Test
@@ -45,7 +44,7 @@ public class MowerServiceTest {
         instruction.add("1 2 N");
         instruction.add("GAGAGAGAA");
         MowerService service = new MowerService();
-        List<Tuple<String, String>> ins = ParsingUtils.loadTuples(instruction);
+        List<Tuple<String, String>> ins = ParsingUtils.collectToTuples(instruction);
         Assert.assertTrue(ins.size() == 1);
         Assert.assertEquals(ins.get(0).first, "1 2 N");
         Assert.assertEquals(ins.get(0).second, "GAGAGAGAA");
@@ -60,7 +59,7 @@ public class MowerServiceTest {
         instruction.add("3 3 E");
         instruction.add("AADAADADDA");
         MowerService service = new MowerService();
-        List<Tuple<String, String>> ins = ParsingUtils.loadTuples(instruction);
+        List<Tuple<String, String>> ins = ParsingUtils.collectToTuples(instruction);
         Assert.assertTrue(ins.size() == 2);
         Assert.assertEquals(ins.get(1).first, "3 3 E");
         Assert.assertEquals(ins.get(1).second, "AADAADADDA");

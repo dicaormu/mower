@@ -18,7 +18,7 @@ public class ParsingUtils {
     static Function<List<String>, Tuple<String, String>> collectLine = line ->
             new Tuple<>(line.get(0), line.get(1));
 
-    public static List<Tuple<String, String>> loadTuples(List<String> instructions) {
+    public static List<Tuple<String, String>> collectToTuples(List<String> instructions) {
         List<Tuple<String, String>> ins = new ArrayList<>();
         for (int skip = 1; skip < instructions.size(); skip += 2) {
             final Tuple<String, String> tuple = instructions.stream().skip(skip).limit(2).
@@ -28,8 +28,8 @@ public class ParsingUtils {
         return ins;
     }
 
-    public  static Queue<String> asQueue(String[] split) {
-        return new LinkedList<>(asList(split));
+    public  static Queue<String> asQueue(String[] value) {
+        return new LinkedList<>(asList(value));
     }
 
 }

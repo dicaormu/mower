@@ -7,26 +7,26 @@ import static fr.com.mowitnow.domain.Point.PointBuilder.withX;
 public enum Direction {
     N('W', 'E') {
         @Override
-        public Point addInPoint(int x, int y, int val) {
-            return withX(x).andY(y + val);
+        public Point estimateNewPoint(int x, int y, int step) {
+            return withX(x).andY(y + step);
         }
     },
     S('E', 'W') {
         @Override
-        public Point addInPoint(int x, int y, int val) {
-            return withX(x).andY(y - val);
+        public Point estimateNewPoint(int x, int y, int step) {
+            return withX(x).andY(y - step);
         }
     },
     E('N', 'S') {
         @Override
-        public Point addInPoint(int x, int y, int val) {
-            return withX(x + val).andY(y);
+        public Point estimateNewPoint(int x, int y, int step) {
+            return withX(x + step).andY(y);
         }
     },
     W('S', 'N') {
         @Override
-        public Point addInPoint(int x, int y, int val) {
-            return withX(x - val).andY(y);
+        public Point estimateNewPoint(int x, int y, int step) {
+            return withX(x - step).andY(y);
         }
     };
 
@@ -45,6 +45,6 @@ public enum Direction {
         return valueOf(next.toString());
     }
 
-    public abstract Point addInPoint(int x, int y, int val);
+    public abstract Point estimateNewPoint(int x, int y, int step);
 
 }
