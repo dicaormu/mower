@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static fr.com.mowitnow.domain.Point.*;
+import static fr.com.mowitnow.domain.Point.PointBuilder;
 
 public class LawnTest {
 
@@ -12,7 +12,28 @@ public class LawnTest {
 
     @Before
     public final void setUp() {
-        lawn = Lawn.LawnBuilder.from("5 5").build();
+        lawn = Lawn.LawnBuilder.fromStringToLawn.apply("5 5");
+    }
+
+    @Test
+    public final void should_return_lawn_from_scratch() {
+        Lawn newLawn = Lawn.LawnBuilder.fromStringToLawn.apply("7 7");
+        Assert.assertNotNull(newLawn);
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public final void should_return_numberformat_exception_lawn_from_scratch() {
+        Lawn.LawnBuilder.fromStringToLawn.apply("");
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public final void should_return_arrayoutofbounds_exception_lawn_from_scratch() {
+        Lawn.LawnBuilder.fromStringToLawn.apply("1");
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public final void should_return_runtime_exception_lawn_from_scratch() {
+        Lawn.LawnBuilder.fromStringToLawn.apply("a a");
     }
 
     @Test

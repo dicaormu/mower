@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static fr.com.mowitnow.domain.Lawn.LawnBuilder.from;
+import static fr.com.mowitnow.domain.Lawn.LawnBuilder.fromStringToLawn;
 import static fr.com.mowitnow.domain.Mower.MowerBuilder.fromStringToMower;
 import static fr.com.mowitnow.utils.Constants.EMPTY_STRING;
 import static fr.com.mowitnow.utils.ParsingUtils.asQueue;
@@ -26,8 +27,8 @@ public class MowerService {
 
     public Lawn computeInstructions(Supplier<List<String>> compute, Consumer<Mower> printer) {
         final List<String> allInstructions = compute.get();
-        logger.info("Computing {} instructions ", allInstructions.size());
-        final Lawn lawn = from(allInstructions.get(0)).build();
+        logger.debug("Computing {} instructions ", allInstructions.size());
+        final Lawn lawn = fromStringToLawn.apply(allInstructions.get(0));
         final List<Tuple<String, String>> tuples = collectToTuples(allInstructions);
         tuples.stream().forEach(tuple -> {
             logger.debug("Handling mower in position {} with instructions {} ", tuple.first, tuple.second);
@@ -36,11 +37,11 @@ public class MowerService {
             final Mower newState = executeInstructions(asQueue(movementsLine), initialMower, lawn, printer);
             lawn.addMower(newState);
         });
-        logger.info("Done computing instructions");
+        logger.debug("Done computing instructions");
         return lawn;
     }
 
-    public Mower executeInstructions(Queue<String> instructions, Mower mower, final Lawn lawn, Consumer<Mower> printer) {
+    private Mower executeInstructions(Queue<String> instructions, Mower mower, final Lawn lawn, Consumer<Mower> printer) {
         BiFunction<Mower, Move, Mower> move =
                 (oldMower, newMove) -> newMove.apply(oldMower, lawn);
         final Mower mow = move.apply(mower, Move.valueOf(instructions.poll()));

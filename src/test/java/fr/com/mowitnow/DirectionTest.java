@@ -8,12 +8,14 @@ import org.junit.Test;
 import static fr.com.mowitnow.domain.Point.*;
 
 public class DirectionTest {
-    int step;
+    int step=1;
 
-    @Before
-    public final void setUp() {
-       step=1;
+    @Test
+    public void should_return_direction() throws Exception {
+        Direction dir = Direction.valueOf("N");
+        Assert.assertEquals(dir, Direction.N);
     }
+
 
     @Test
     public void should_return_previous_from_north() {

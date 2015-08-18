@@ -3,6 +3,7 @@ package fr.com.mowitnow.domain;
 import fr.com.mowitnow.utils.Constants;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static fr.com.mowitnow.domain.Point.PointBuilder.withX;
 
@@ -43,21 +44,22 @@ public class Lawn {
             this.maxCoordinate = maxCoordinate;
         }
 
-        public static LawnBuilder from(String line) {
-            Objects.nonNull(line);
-            String[] pocs = line.split(Constants.SEPARATOR);
-            Point max = withX(new Integer(pocs[0])).andY(new Integer(pocs[1]));
-            return from(max);
-        }
-
         public static LawnBuilder from(Point maxCoordinate) {
             return new LawnBuilder(maxCoordinate);
         }
 
-
         public Lawn build() {
             return new Lawn(maxCoordinate);
         }
+
+        public static Function<String,Lawn> fromStringToLawn =
+                (line)->{
+                    Objects.nonNull(line);
+                    String[] pocs = line.split(Constants.SEPARATOR);
+                    Point max = withX(new Integer(pocs[0])).andY(new Integer(pocs[1]));
+                    return from(max).build();
+                };
+
     }
 
 }
