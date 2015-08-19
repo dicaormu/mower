@@ -16,3 +16,7 @@ dependencies {
     compile group:'org.apache.commons', name:'commons-lang3', version:'3.4'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
