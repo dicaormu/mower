@@ -50,19 +50,23 @@ Instructions must arrive as follow:
 ### Make it run
 1. Create a supplier, examples:
    - Supplier that provides a list.
+   
    ```
    Supplier<List<String>> supplier = () -> Arrays.asList("5 5", "1 2 N", "GAGAGAGAA", "3 3 E", "AADAADADDA");
    ```
    - Supplier that provides a file
+   
    ```
    Supplier<List<String>> supplier = new FileComputeSupplier(MowerService.class
                     .getClassLoader().getResource("file.txt").getPath());
    ```
 2. Create an instance of the class 'fr.com.mowitnow.service.MowerService', example:
+
    ```
    MowerService service = new MowerService();
    ```
 3. Call the method 'computeInstructions' using the supplier created in point 1 and a consumer to print the mower, example: 
+
    ```
    service.computeInstructions(supplier, System.out::println);
    ```
